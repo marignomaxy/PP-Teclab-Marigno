@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "nombre": "Avena",
+    "precio": 500,
+    "descripcion": "Avena 100% natural para ayudarte en tu nutricion",
+    "imagen": "https://images.ecestaticos.com/Dy-k623a1Qb1peI5TrOoxdjkDck=/2x112:2120x1302/1200x1200/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fa58%2F338%2F915%2Fa583389152e68238246080fc07f1d5b5.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Almohaditas",
+    "precio": 200,
+    "descripcion": "Las almohaditas mas ricas del mundo",
+    "imagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvdf3gCAyGh2CGGtDK0nLLmrvTjMSS0e55cQ&s"
+  },
+  {
+    "id": 3,
+    "nombre": "Mix de avena",
+    "precio": 300,
+    "descripcion": "Mix de semillas saludable para que puedas incorporar a tu nutricion",
+    "imagen": "https://neufood.com.ar/wp-content/uploads/2020/10/image.png"
+  },
+  {
+    "id": 4,
+    "nombre": "Cacao",
+    "precio": 500,
+    "descripcion": "Las cacao mas rico del mundo",
+    "imagen": "https://s3.abcstatics.com/media/bienestar/2019/10/04/cacao-1-U303043057595f0H--1248x698@abc.jpg"
+  }
+]
