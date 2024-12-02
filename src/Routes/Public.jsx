@@ -7,6 +7,10 @@ import Contacto from '../Pages/Contacto';
 import Carrito from '../Pages/Carrito';
 import Registrarse from '../Pages/Registrarse';
 import Detalle from '../Pages/Detalle';
+import Activacion from '../Pages/Activacion';
+import DetalleUsuario from '../Pages/DetalleUsuario';
+import DetalleFactura from '../Pages/DetalleFactura';
+import PanelAdministrador from '../Pages/PanelAdministrador';
 
 function Public() {
   return (
@@ -18,6 +22,10 @@ function Public() {
       <Route path="/carrito" element={<Carrito />} />
       <Route path="/registro" element={<Registrarse />} />
       <Route path="/descripcion/:id" element={<Detalle />} />
+      <Route path="/activado" element={<Activacion />} />
+      <Route path="/detalleUsuario/:id" element={<DetalleUsuario />} />
+      <Route path="/detalleFactura/:id" element={<DetalleFactura />} />
+      <Route path="/adminPanel" element={<PanelAdministrador />} />
     </Routes>
   );
 }

@@ -12,7 +12,9 @@ function App() {
         <RouteTracker>
           <AuthProvider>
             <Navbar />
-            <Public />
+            <div className="min-h-screen">
+              <Public />
+            </div>
             <Footer />
           </AuthProvider>
         </RouteTracker>

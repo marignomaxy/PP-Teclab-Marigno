@@ -1,41 +1,38 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, NavLink, useLocation } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 import { AuthContext } from '../Context/authContext'; // Asegúrate de que la ruta sea correcta
 import { obtenerUsuario } from '/src/Services/usuariosService.js';
 
 function Login() {
-  const location = useLocation();
   const [mensajeConfirmacion, setMensajeConfirmacion] = useState('');
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: 'onChange',
+  });
   const navigate = useNavigate();
   const { handlerLogin } = useContext(AuthContext);
 
   const handleLogin = async (data) => {
     try {
-      const loginData = { email: data.email, contraseña: data.password };
+      const loginData = { email: data.email, password: data.password };
       const response = await obtenerUsuario(loginData);
-      let usuario = response.usuario;
+      console.log(response);
+      let usuario = response.userName;
       let token = response.token;
-      console.log('usuario y token recibidos', usuario, token); // Verifica que usuario y token se reciban correctamente
-      setMensajeConfirmacion(`Bienvenido ${usuario?.nombre}`);
-      handlerLogin(usuario.nombre, token);
+      let id = response.id;
+      let role = response.role;
+      setMensajeConfirmacion(`Bienvenido ${usuario}`);
+      handlerLogin(usuario, token, id, role);
       const lastPath = localStorage.getItem('lastPath') || '/';
       setTimeout(() => {
-        console.log('Redirigiendo a la última página visitada' + lastPath);
         navigate(lastPath);
       }, 2000);
     } catch (error) {
-      console.error('Error en handleLogin', error); // Añade un log para el error
-      if (error.message === 'Usuario o contraseña incorrectos') {
-        setMensajeConfirmacion('Usuario o contraseña incorrectos');
-      } else {
-        setMensajeConfirmacion('Error al obtener el usuario');
-      }
+      setMensajeConfirmacion(error.message);
     }
   };
 
@@ -74,8 +71,13 @@ function Login() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               type="email"
-              {...register('email', { required: true })}
+              {...register('email', { required: 'El email es obligatorio' })}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs italic">
+                {errors.email.message}
+              </p>
+            )}
           </div>
           <div className="mb-6">
             <label
@@ -88,13 +90,21 @@ function Login() {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
-              {...register('password', { required: true })}
+              {...register('password', {
+                required: 'La contraseña es obligatoria',
+              })}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs italic">
+                {errors.password.message}
+              </p>
+            )}
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="submit"
+              className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+                !isValid ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
               Ingresar
             </button>

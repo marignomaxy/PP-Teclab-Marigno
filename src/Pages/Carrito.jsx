@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Context/authContext';
+import { createFactura } from '../Services/facturaServices';
 
 function Carrito() {
   const [carrito, setCarrito] = useState([]);
@@ -34,11 +35,41 @@ function Carrito() {
     }
   };
 
-  const aceptarCompra = () => {
-    setMostrarPopup(false);
-    setCarrito([]);
-    localStorage.removeItem('carrito');
-    setMensajeConfirmacion(' Gracias por su compra, ' + user);
+  const aceptarCompra = async () => {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const detalleFactura = carrito.map((item) => ({
+      producto: { id: item.id },
+      cantidad: item.cantidad,
+    }));
+
+    const factura = { detalleFactura };
+    let token = localStorage.getItem('Token');
+
+    if (!token) {
+      console.error('Token no encontrado');
+      return;
+    }
+
+    // Eliminar comillas del token
+    token = token.replace(/"/g, '');
+
+    // Verificar el formato del token
+    const tokenParts = token.split('.');
+    if (tokenParts.length !== 3) {
+      console.error('Token JWT no válido');
+      return;
+    }
+
+    try {
+      await createFactura(factura, token);
+      setMostrarPopup(false);
+      setCarrito([]);
+      localStorage.removeItem('carrito');
+      setMensajeConfirmacion(' Gracias por su compra, ' + user);
+    } catch (error) {
+      console.error('Error al crear factura', error);
+      // Manejar el error según sea necesario
+    }
   };
 
   const cancelarCompra = () => {
@@ -79,7 +110,7 @@ function Carrito() {
   };
 
   return (
-    <div className="p-5 font-poppins">
+    <div className="p-5 font-poppins h-screen">
       {mensajeConfirmacion && (
         <div
           className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"

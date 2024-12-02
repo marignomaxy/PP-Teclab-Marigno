@@ -43,17 +43,14 @@ function Home() {
           <img
             src="https://images.ecestaticos.com/Dy-k623a1Qb1peI5TrOoxdjkDck=/2x112:2120x1302/1200x1200/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Fa58%2F338%2F915%2Fa583389152e68238246080fc07f1d5b5.jpg"
             alt="..."
-            className="imagenCarrousel"
           />
           <img
             src="https://s3.abcstatics.com/media/bienestar/2019/10/04/cacao-1-U303043057595f0H--1248x698@abc.jpg"
             alt="..."
-            className="imagenCarrousel"
           />
           <img
             src="https://cbdeportes.com/wp-content/uploads/2018/05/PriorizalosalimentosNaturalesyfrescos.jpg"
             alt="..."
-            className="imagenCarrousel"
           />
         </Carousel>
       </div>

@@ -1,11 +1,37 @@
 import { useState, useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Logo from '../Utils/img/amapola.png';
 import { AuthContext } from '../Context/authContext';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { login, user, handlerLogout } = useContext(AuthContext);
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isDropdownFixed, setDropdownFixed] = useState(false);
+  const userRole = localStorage.getItem('role') || '';
+  const navigate = useNavigate();
+
+  const handleMouseEnter = () => {
+    setDropdownVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDropdownFixed) {
+      setDropdownVisible(false);
+    }
+  };
+
+  const id = localStorage.getItem('id');
+
+  const handleToggleDropdown = () => {
+    setDropdownFixed(!isDropdownFixed);
+    setDropdownVisible(!isDropdownFixed);
+  };
+
+  const handleLog = () => {
+    handlerLogout();
+    navigate('/login');
+  };
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -73,12 +99,43 @@ function Navbar() {
           </NavLink>
           {login ? (
             <>
-              <button
-                className="navbar-item font-poppins text-white px-4 py-2 text-xl"
-                onClick={handlerLogout}
+              <div
+                className="relative"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
               >
-                Cerrar Sesión
-              </button>
+                <h2
+                  className="font-poppins px-4 py-2 text-xl text-white cursor-pointer"
+                  onClick={handleToggleDropdown}
+                >
+                  Bienvenido {user}
+                </h2>
+                {isDropdownVisible && (
+                  <div className="absolute w-80 bg-white rounded-md shadow-lg z-10">
+                    {userRole.includes('ROLE_ADMIN') ? (
+                      <NavLink
+                        to="/adminPanel"
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                      >
+                        Panel de Administrador
+                      </NavLink>
+                    ) : (
+                      <NavLink
+                        to={`/detalleUsuario/${id}`}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                      >
+                        Ver Facturas
+                      </NavLink>
+                    )}
+                    <button
+                      onClick={handleLog}
+                      className="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-200 hover:rounded-md"
+                    >
+                      Cerrar sesión
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           ) : (
             <NavLink
@@ -89,7 +146,7 @@ function Navbar() {
                   : 'text-white'
               }
             >
-              <h2 className="font-poppins px-4 py-2 text-xl">Iniciar sesion</h2>
+              <h2 className="font-poppins px-4 py-2 text-xl">Iniciar sesión</h2>
             </NavLink>
           )}
 
@@ -124,13 +181,6 @@ function Navbar() {
               </h2>
             )}
           </NavLink>
-          {login && (
-            <>
-              <span className="navbar-item font-poppins px-4 py-2 text-xl text-white">
-                Bienvenido, {user}
-              </span>
-            </>
-          )}
         </div>
       </div>
     </nav>
